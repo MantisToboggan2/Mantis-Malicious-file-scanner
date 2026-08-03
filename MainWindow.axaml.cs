@@ -27,12 +27,12 @@ public partial class MainWindow : Window
         var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
             AllowMultiple = false,
-            Title = "Choose a Lua file or ZIP",
+            Title = "Choose a file or archive",
             FileTypeFilter =
             [
-                new FilePickerFileType("Lua or ZIP")
+                new FilePickerFileType("Supported code files")
                 {
-                    Patterns = ["*.lua", "*.luau", "*.zip"]
+                    Patterns = ["*.lua", "*.luau", "*.cpp", "*.cxx", "*.cc", "*.hpp", "*.hxx", "*.hh", "*.h", "*.rs", "*.cs", "*.dll", "*.exe", "*.winmd", "*.e2", "*.zip"]
                 },
                 FilePickerFileTypes.All
             ]
@@ -74,12 +74,14 @@ public partial class MainWindow : Window
         }
 
         ViewModel.SetBusy(true);
-        ViewModel.StatusMessage = "Scanning files...";
+        ViewModel.StatusMessage = ViewModel.SelectedScanLanguage == ScanLanguageChoice.AutoDetect
+            ? "Scanning files..."
+            : $"Scanning files as {ViewModel.SelectedScanLanguage.DisplayName()}...";
 
         try
         {
             var path = ViewModel.SelectedPath.Trim();
-            var result = await Task.Run(() => _interop.ScanPath(path));
+            var result = await Task.Run(() => _interop.ScanPath(path, ViewModel.SelectedScanLanguage));
 
             if (!result.Success)
             {

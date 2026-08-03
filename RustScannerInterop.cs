@@ -15,9 +15,12 @@ public sealed class RustScannerInterop
     private static BackdoorScanFunction? _scanFile;
     private static BackdoorScanFunction? _scanFolder;
     private static BackdoorScanFunction? _scanZip;
+    private static BackdoorScanFunctionWithLanguage? _scanFileWithLanguage;
+    private static BackdoorScanFunctionWithLanguage? _scanFolderWithLanguage;
+    private static BackdoorScanFunctionWithLanguage? _scanZipWithLanguage;
     private static FreeCStringFunction? _freeCString;
 
-    public RustScanResult ScanPath(string path)
+    public RustScanResult ScanPath(string path, ScanLanguageChoice language = ScanLanguageChoice.AutoDetect)
     {
         if (string.IsNullOrWhiteSpace(path))
         {
@@ -26,12 +29,13 @@ public sealed class RustScannerInterop
 
         EnsureLoaded();
 
-        var scanFn = ResolveScanFunction(path);
         var nativePath = Marshal.StringToCoTaskMemUTF8(path);
 
         try
         {
-            var nativeResult = scanFn(nativePath);
+            var nativeResult = language == ScanLanguageChoice.AutoDetect
+                ? ResolveAutoScanFunction(path)(nativePath)
+                : ResolveOverrideScanFunction(path)(nativePath, ToNativeLanguage(language));
 
             try
             {
@@ -62,7 +66,7 @@ public sealed class RustScannerInterop
         }
     }
 
-    private static BackdoorScanFunction ResolveScanFunction(string path)
+    private static BackdoorScanFunction ResolveAutoScanFunction(string path)
     {
         if (Directory.Exists(path))
         {
@@ -75,6 +79,21 @@ public sealed class RustScannerInterop
         }
 
         return _scanFile!;
+    }
+
+    private static BackdoorScanFunctionWithLanguage ResolveOverrideScanFunction(string path)
+    {
+        if (Directory.Exists(path))
+        {
+            return _scanFolderWithLanguage!;
+        }
+
+        if (path.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+        {
+            return _scanZipWithLanguage!;
+        }
+
+        return _scanFileWithLanguage!;
     }
 
     private static void EnsureLoaded()
@@ -95,6 +114,9 @@ public sealed class RustScannerInterop
             _scanFile = GetExport<BackdoorScanFunction>("backdoor_scan_file");
             _scanFolder = GetExport<BackdoorScanFunction>("backdoor_scan_folder");
             _scanZip = GetExport<BackdoorScanFunction>("backdoor_scan_zip");
+            _scanFileWithLanguage = GetExport<BackdoorScanFunctionWithLanguage>("backdoor_scan_file_with_language");
+            _scanFolderWithLanguage = GetExport<BackdoorScanFunctionWithLanguage>("backdoor_scan_folder_with_language");
+            _scanZipWithLanguage = GetExport<BackdoorScanFunctionWithLanguage>("backdoor_scan_zip_with_language");
             _freeCString = GetExport<FreeCStringFunction>("backdoor_free_c_string");
             _loaded = true;
         }
@@ -218,8 +240,26 @@ public sealed class RustScannerInterop
         return ptr == nint.Zero ? null : Marshal.PtrToStringUTF8(ptr);
     }
 
+    private static BackdoorScanLanguage ToNativeLanguage(ScanLanguageChoice choice)
+    {
+        return choice switch
+        {
+            ScanLanguageChoice.AutoDetect => BackdoorScanLanguage.AutoDetect,
+            ScanLanguageChoice.Lua => BackdoorScanLanguage.Lua,
+            ScanLanguageChoice.Cpp => BackdoorScanLanguage.Cpp,
+            ScanLanguageChoice.Rust => BackdoorScanLanguage.Rust,
+            ScanLanguageChoice.CSharp => BackdoorScanLanguage.CSharp,
+            ScanLanguageChoice.DotNetModule => BackdoorScanLanguage.DotNetModule,
+            ScanLanguageChoice.Expression2 => BackdoorScanLanguage.Expression2,
+            _ => BackdoorScanLanguage.AutoDetect,
+        };
+    }
+
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate RustScanResultNative BackdoorScanFunction(nint path);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate RustScanResultNative BackdoorScanFunctionWithLanguage(nint path, BackdoorScanLanguage language);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate void FreeCStringFunction(nint ptr);
@@ -233,6 +273,17 @@ public sealed class RustScannerInterop
         public readonly uint detection_count;
         public readonly nint json;
         public readonly nint error;
+    }
+
+    private enum BackdoorScanLanguage
+    {
+        AutoDetect = 0,
+        Lua = 1,
+        Cpp = 2,
+        Rust = 3,
+        CSharp = 4,
+        DotNetModule = 5,
+        Expression2 = 6,
     }
 }
 
