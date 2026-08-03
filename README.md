@@ -38,8 +38,8 @@ Transform the scanner from a single‑platform ZIP‑based tool into a multi‑p
 
 This is a major milestone and will represent the jump to v2.0.0.
 
-🧩 Phase 1 — Multi‑Language Scanning Engine
-🎯 Objective
+## 🧩 Phase 1 — Multi‑Language Scanning Engine
+## 🎯 Objective
 Expand the scanner to support most popular languages and file extensions, including (but not limited to*):
 
 C#
@@ -87,8 +87,8 @@ Configurable scanning rules
 
 ---
 
-🧩 Phase 2 — Cross‑Platform Installer System
-🎯 Objective
+## 🧩 Phase 2 — Cross‑Platform Installer System
+## 🎯 Objective
 Create installers for:
 
 Windows → MSI or EXE installer
@@ -108,8 +108,8 @@ Post‑install setup (config folders, logs, update agent)
 
 ---
 
-🧩 Phase 3 — Cloudflare R2 Hosting Integration
-🎯 Objective
+## 🧩 Phase 3 — Cloudflare R2 Hosting Integration
+## 🎯 Objective
 Host all update assets on Cloudflare R2, including:
 
 latest-version.txt
@@ -135,8 +135,8 @@ Optional CDN caching via Cloudflare
 
 ---
 
-🧩 Phase 4 — Auto‑Update System
-🎯 Objective
+## 🧩 Phase 4 — Auto‑Update System
+## 🎯 Objective
 Implement a full auto‑update pipeline:
 
 🔧 Deliverables
@@ -177,8 +177,8 @@ Relaunches main app
 
 ---
 
-🧩 Phase 5 — Unified Release Pipeline
-🎯 Objective
+## 🧩 Phase 5 — Unified Release Pipeline
+## 🎯 Objective
 Automate builds for:
 
 Windows
