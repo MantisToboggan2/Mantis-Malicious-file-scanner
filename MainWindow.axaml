@@ -1,0 +1,215 @@
+<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="using:Mantis_backdoor_scanner"
+		mc:Ignorable="d"
+		d:DesignWidth="1400"
+		d:DesignHeight="880"
+		x:Class="Mantis_backdoor_scanner.MainWindow"
+		x:DataType="local:MainWindowViewModel"
+		Title="Mantis Scanner"
+		MinWidth="1220"
+		MinHeight="780"
+		Background="#0B1220"
+		Foreground="#E6EEF9">
+	<Window.Styles>
+		<Style Selector="TextBlock.cardTitle">
+			<Setter Property="Foreground" Value="#8FA7C3" />
+			<Setter Property="FontSize" Value="12" />
+			<Setter Property="FontWeight" Value="SemiBold" />
+		</Style>
+		<Style Selector="TextBlock.cardValue">
+			<Setter Property="Foreground" Value="#ECF4FF" />
+			<Setter Property="FontSize" Value="24" />
+			<Setter Property="FontWeight" Value="Bold" />
+		</Style>
+		<Style Selector="Button.primaryAction">
+			<Setter Property="Background" Value="#2A77FF" />
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="Padding" Value="12,8" />
+		</Style>
+		<Style Selector="Button.warnAction">
+			<Setter Property="Background" Value="#9E1F35" />
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="Padding" Value="12,8" />
+		</Style>
+		<Style Selector="Button">
+			<Setter Property="Padding" Value="10,7" />
+			<Setter Property="Margin" Value="0,2,0,2" />
+		</Style>
+	</Window.Styles>
+
+	<Grid ColumnDefinitions="350,*">
+		<Border Grid.Column="0"
+				Background="#0F172A"
+				BorderBrush="#1E293B"
+				BorderThickness="0,0,1,0"
+				Padding="20">
+			<StackPanel Spacing="14">
+				<StackPanel Spacing="6">
+					<TextBlock Text="MANTIS" FontSize="14" FontWeight="Bold" Foreground="#4EA1FF" />
+					<TextBlock Text="Malicious Code Scanner" FontSize="24" FontWeight="Bold" TextWrapping="Wrap" />
+					<Border Background="#111B31" BorderBrush="#223357" BorderThickness="1" CornerRadius="8" Padding="10" Margin="0,4,0,0">
+						<TextBlock Text="This tool scans files, folders, and archives for signs of potentially malicious or unsafe code. It highlights suspicious patterns—such as dynamic code execution—so you can understand what might be harmful, even if you are not a programmer."
+								   Foreground="#B7CAE2"
+								   TextWrapping="Wrap" />
+					</Border>
+				</StackPanel>
+
+				<Border Background="#111B31" BorderBrush="#223357" BorderThickness="1" CornerRadius="8" Padding="12">
+					<StackPanel Spacing="10">
+						<TextBlock Text="Choose what to scan" FontWeight="SemiBold" FontSize="15" />
+						<TextBlock Text="Use the buttons below to choose either files/archives or a folder."
+								   Foreground="#8FA7C3"
+								   TextWrapping="Wrap" />
+
+						<Button Content="Browse archives or files"
+								Click="PickFileArchiveButton_OnClick" />
+						<Button Content="Browse folders"
+								Click="PickFolderButton_OnClick" />
+
+						<TextBlock Text="Selected item" FontWeight="SemiBold" Margin="0,8,0,0" />
+						<Border Background="#0B1323" BorderBrush="#294776" BorderThickness="1" CornerRadius="6" Padding="8">
+							<TextBlock Text="{Binding SelectedPath}"
+									   TextWrapping="Wrap"
+									   MinHeight="44"
+									   MaxHeight="140" />
+						</Border>
+					</StackPanel>
+				</Border>
+
+				<Border Background="#111B31" BorderBrush="#223357" BorderThickness="1" CornerRadius="8" Padding="12">
+					<StackPanel Spacing="10">
+						<TextBlock Text="Actions" FontWeight="SemiBold" FontSize="15" />
+						<TextBlock Text="Run the scan first, then remove the flagged malicious code if needed."
+								   Foreground="#8FA7C3"
+								   TextWrapping="Wrap" />
+						<Button Content="Start scan"
+								Classes="primaryAction"
+								Click="ScanButton_OnClick"
+								IsEnabled="{Binding CanScan}" />
+						<Button Content="Annihilate malicious code"
+								Classes="warnAction"
+								Click="AnnihilateButton_OnClick"
+								IsEnabled="{Binding CanAnnihilate}" />
+						<Button Content="Clear results"
+								Click="ClearButton_OnClick" />
+					</StackPanel>
+				</Border>
+
+				<Border Background="#111B31" BorderBrush="#223357" BorderThickness="1" CornerRadius="8" Padding="12">
+					<StackPanel Spacing="6">
+						<TextBlock Text="Status" FontWeight="SemiBold" />
+						<TextBlock Text="{Binding StatusMessage}" Foreground="#8FA7C3" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+			</StackPanel>
+		</Border>
+
+		<Grid Grid.Column="1" RowDefinitions="Auto,*,Auto" Margin="18" RowSpacing="14">
+			<Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="10">
+				<Border Grid.Column="0" Background="#121F38" BorderBrush="#2A4673" BorderThickness="1" CornerRadius="10" Padding="12">
+					<StackPanel>
+						<TextBlock Text="Files checked" Classes="cardTitle" />
+						<TextBlock Text="{Binding FilesScannedText}" Classes="cardValue" />
+					</StackPanel>
+				</Border>
+				<Border Grid.Column="1" Background="#121F38" BorderBrush="#2A4673" BorderThickness="1" CornerRadius="10" Padding="12">
+					<StackPanel>
+						<TextBlock Text="Data read (bytes)" Classes="cardTitle" />
+						<TextBlock Text="{Binding BytesScannedText}" Classes="cardValue" />
+					</StackPanel>
+				</Border>
+				<Border Grid.Column="2" Background="#121F38" BorderBrush="#2A4673" BorderThickness="1" CornerRadius="10" Padding="12">
+					<StackPanel>
+						<TextBlock Text="Warnings found" Classes="cardTitle" />
+						<TextBlock Text="{Binding WarningCountText}" Classes="cardValue" Foreground="#4EA1FF" />
+					</StackPanel>
+				</Border>
+				<Border Grid.Column="3" Background="#121F38" BorderBrush="#2A4673" BorderThickness="1" CornerRadius="10" Padding="12">
+					<StackPanel>
+						<TextBlock Text="Warning groups" Classes="cardTitle" />
+						<TextBlock Text="{Binding CategorySummary}" Foreground="#D8E8FF" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+			</Grid>
+
+			<Border Grid.Row="1" Background="#101B31" BorderBrush="#263A63" BorderThickness="1" CornerRadius="10" Padding="12">
+				<Grid RowDefinitions="Auto,*" RowSpacing="10">
+					<StackPanel Orientation="Vertical" Spacing="3">
+						<TextBlock Text="Warnings" FontSize="16" FontWeight="SemiBold" />
+						<TextBlock Text="Select an item to view details below." Foreground="#8FA7C3" TextWrapping="Wrap" />
+					</StackPanel>
+					<ListBox Grid.Row="1"
+							 ItemsSource="{Binding Findings}"
+							 SelectionChanged="FindingsListBox_OnSelectionChanged"
+							 Background="Transparent"
+							 BorderThickness="0">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Border Margin="0,0,0,8"
+										Padding="12"
+										CornerRadius="8"
+										Background="#132443"
+										BorderBrush="#294776"
+										BorderThickness="1">
+									<Grid RowDefinitions="Auto,Auto,Auto"
+										  ColumnDefinitions="Auto,*,Auto"
+										  ColumnSpacing="10"
+										  RowSpacing="5">
+										<Border Background="#4EA1FF" CornerRadius="999" Padding="8,2">
+											<TextBlock Text="{Binding Severity}" Foreground="#07101F" FontWeight="Bold" FontSize="11" />
+										</Border>
+										<TextBlock Grid.Column="1" Text="{Binding RuleName}" FontWeight="Bold" TextWrapping="Wrap" />
+										<TextBlock Grid.Column="2" Text="{Binding Category}" Foreground="#7FB1FF" HorizontalAlignment="Right" TextWrapping="Wrap" />
+
+										<TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Source}" Foreground="#9AB3CF" FontSize="12" TextWrapping="Wrap" />
+										<TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Snippet}" Foreground="#D4E3F8" TextWrapping="Wrap" />
+									</Grid>
+								</Border>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+				</Grid>
+			</Border>
+
+			<Border Grid.Row="2"
+					Background="#0F1A2E"
+					BorderBrush="#263A63"
+					BorderThickness="1"
+					CornerRadius="10"
+					Padding="12"
+					MinHeight="300">
+				<Grid RowDefinitions="Auto,*" RowSpacing="10">
+					<StackPanel Spacing="3">
+						<TextBlock Text="Details" FontSize="16" FontWeight="SemiBold" />
+						<TextBlock Text="This section explains each warning in plain language." Foreground="#8FA7C3" TextWrapping="Wrap" />
+					</StackPanel>
+					<Grid Grid.Row="1" ColumnDefinitions="280,*" ColumnSpacing="16">
+						<StackPanel Spacing="7">
+							<TextBlock Text="Rule" Foreground="#8FA7C3" />
+							<TextBlock Text="{Binding DetailRule}" TextWrapping="Wrap" />
+							<TextBlock Text="Severity" Foreground="#8FA7C3" Margin="0,8,0,0" />
+							<TextBlock Text="{Binding DetailSeverity}" TextWrapping="Wrap" />
+							<TextBlock Text="Group" Foreground="#8FA7C3" Margin="0,8,0,0" />
+							<TextBlock Text="{Binding DetailCategory}" TextWrapping="Wrap" />
+							<TextBlock Text="Location" Foreground="#8FA7C3" Margin="0,8,0,0" />
+							<TextBlock Text="{Binding DetailLine}" TextWrapping="Wrap" MinHeight="22" />
+						</StackPanel>
+						<StackPanel Grid.Column="1" Spacing="7">
+							<TextBlock Text="File" Foreground="#8FA7C3" />
+							<TextBlock Text="{Binding DetailSource}" TextWrapping="Wrap" />
+							<TextBlock Text="Code sample" Foreground="#8FA7C3" Margin="0,8,0,0" />
+							<Border Background="#0B1323" BorderBrush="#263A63" BorderThickness="1" CornerRadius="8" Padding="10">
+								<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" MinHeight="110">
+									<TextBlock Text="{Binding DetailSnippet}" FontFamily="Consolas" TextWrapping="Wrap" />
+								</ScrollViewer>
+							</Border>
+						</StackPanel>
+					</Grid>
+				</Grid>
+			</Border>
+		</Grid>
+	</Grid>
+</Window>
