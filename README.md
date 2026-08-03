@@ -32,14 +32,14 @@ Extract the ZIP and run.
 
 ---
 
-Mantis Malicious Code Scanner — Roadmap to v2.0.0
-🎯 v2.0.0 Goal
-Transform the scanner from a single‑platform ZIP‑based tool into a multi‑platform, auto‑updating, installer‑driven, multi‑language malicious code scanner hosted on Cloudflare R2 and distributed via mantisrealm.com.
+## Mantis Malicious Code Scanner — Roadmap to v2.0.0
+🎯 ## v2.0.0 Goal
+Transform the scanner from a single‑platform ZIP‑based tool into a multi‑platform, auto‑updating, installer‑driven, multi‑language malicious code scanner hosted on Cloudflare R2 and distributed via my personal website: ## "https://mantisrealm.com".
 
-This is a major milestone and fully justifies the jump to v2.0.0.
+This is a major milestone and will represent the jump to v2.0.0.
 
-🧩 Phase 1 — Multi‑Language Scanning Engine
-🎯 Objective
+🧩 ## Phase 1 — Multi‑Language Scanning Engine
+🎯 ## Objective
 Expand the scanner to support most popular languages and file extensions, including (but not limited to*):
 
 C#
@@ -87,8 +87,8 @@ Configurable scanning rules
 
 ---
 
-🧩 Phase 2 — Cross‑Platform Installer System
-🎯 Objective
+🧩 ## Phase 2 — Cross‑Platform Installer System
+🎯 ## Objective
 Create installers for:
 
 Windows → MSI or EXE installer
@@ -108,8 +108,8 @@ Post‑install setup (config folders, logs, update agent)
 
 ---
 
-🧩 Phase 3 — Cloudflare R2 Hosting Integration
-🎯 Objective
+🧩 ## Phase 3 — Cloudflare R2 Hosting Integration
+🎯 ## Objective
 Host all update assets on Cloudflare R2, including:
 
 latest-version.txt
@@ -135,8 +135,8 @@ Optional CDN caching via Cloudflare
 
 ---
 
-🧩 Phase 4 — Auto‑Update System
-🎯 Objective
+🧩 ## Phase 4 — Auto‑Update System
+🎯 ## Objective
 Implement a full auto‑update pipeline:
 
 🔧 Deliverables
@@ -177,8 +177,8 @@ Relaunches main app
 
 ---
 
-🧩 Phase 5 — Unified Release Pipeline
-🎯 Objective
+🧩 ## Phase 5 — Unified Release Pipeline
+🎯 ## Objective
 Automate builds for:
 
 Windows
@@ -208,7 +208,7 @@ Release notes generator
 
 ---
 
-🚀 v2.0.0 Release Definition
+🚀 ## v2.0.0 Release Definition
 To officially ship v2.0.0, all of the following must be complete:
 
 ✔ Multi‑language/file scanning engine
