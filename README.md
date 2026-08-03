@@ -34,7 +34,7 @@ Extract the ZIP and run.
 
 ## Mantis Malicious Code Scanner — Roadmap to v2.0.0
 🎯 v2.0.0 Goal
-Transform the scanner from a single‑platform ZIP‑based tool into a multi‑platform, auto‑updating, installer‑driven, multi‑language malicious code scanner hosted on Cloudflare R2 and distributed via my personal website: ## "https://mantisrealm.com".
+Transform the scanner from a single‑platform ZIP‑based tool into a multi‑platform, auto‑updating, installer‑driven, multi‑language malicious code scanner hosted on Cloudflare R2 and distributed via my personal website: # "https://mantisrealm.com".
 
 This is a major milestone and will represent the jump to v2.0.0.
 
