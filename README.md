@@ -26,5 +26,6 @@ Built with:
 ## Installation
 
 Download the latest release from the **Releases** page.
+(https://github.com/MantisToboggan2/Mantis-Malicious-file-scanner/releases/tag/v1.0.0)
 
 Extract the ZIP and run.
