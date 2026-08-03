@@ -29,3 +29,7 @@ Download the latest release from the **Releases** page.
 (https://github.com/MantisToboggan2/Mantis-Malicious-file-scanner/releases/tag/v1.0.0)
 
 Extract the ZIP and run.
+
+## License
+This project is licensed under the Creative Commons BY‑NC‑ND 4.0 License.
+You may share the software with attribution, but commercial use and modification are not permitted.
