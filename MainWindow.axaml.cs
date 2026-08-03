@@ -132,10 +132,12 @@ public partial class MainWindow : Window
             var findings = ViewModel.Findings.ToList();
             var summary = await Task.Run(() => _cleaner.Anihilate(ViewModel.SelectedPath, findings));
 
-            ViewModel.StatusMessage = "Cleanup complete. Run scan again to verify.";
+            ViewModel.StatusMessage = string.IsNullOrWhiteSpace(summary.ReportPath)
+                ? "Cleanup complete. No report was needed. Run scan again to verify."
+                : "Cleanup complete. Report saved. Run scan again to verify.";
             await ShowInfoDialogAsync(
                 "Cleanup Summary",
-                $"Backup: {summary.BackupPath}\n\n{summary.Message}\n\nChanged files: {summary.ChangedFiles}\nRemoved lines: {summary.RemovedLines}");
+                $"Backup: {summary.BackupPath}\nReport: {(string.IsNullOrWhiteSpace(summary.ReportPath) ? "No report was created." : summary.ReportPath)}\n\n{summary.Message}\n\nChanged files: {summary.ChangedFiles}\nRemoved lines: {summary.RemovedLines}");
         }
         catch (Exception ex)
         {
